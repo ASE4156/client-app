@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate Token</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+    <style>
+        .box img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+        }
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 75px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .main-content {
+            margin-left: 200px;
+            padding: 0px 10px;
+        }
+
+        .main-content form {
+            max-width: 500px;
+            margin: auto;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-content form label {
+            margin-top: 10px;
+            display: block;
+            font-weight: bold;
+        }
+
+        .main-content form input[type="text"],
+        .main-content form textarea,
+        .main-content form input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .main-content form textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .main-content form input[type="submit"] {
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .main-content form input[type="submit"]:hover {
+            background-color: #808080;
+        }
+        body, html {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .token-display {
+            height: 20px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7e7e7;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 20px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="/">Prompts</a>
+    <a href="/create">Create New Prompt</a>
+    <a href="/api-token">API Token</a>
+</div>
+
+<div class="main-content">
+    <h2>Generate API Token</h2>
+    {% if existing_token %}
+        <div class="token-display">Existing Token: {{ existing_token }}</div>
+    {% endif %}
+    <form id="tokenForm">
+        <input type="submit" value="Generate Token">
+    </form>
+    <div id="tokenDisplay" class="token-display">
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('tokenForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var token = generateToken();
+        document.getElementById('tokenDisplay').textContent = token;
+    });
+
+    function generateToken() {
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var token = '';
+        for (var i = 0; i < 16; i++) {
+            token += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return token;
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Negotiator</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+    <style>
+        .box img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+        }
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 75px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .main-content {
+            margin-left: 200px;
+            padding: 0px 10px;
+        }
+
+        .main-content form {
+            max-width: 500px;
+            margin: auto;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .main-content form label {
+            margin-top: 10px;
+            display: block;
+            font-weight: bold;
+        }
+
+        .main-content form input[type="text"],
+        .main-content form textarea,
+        .main-content form input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .main-content form textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .main-content form input[type="submit"] {
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .main-content form input[type="submit"]:hover {
+            background-color: #808080;
+        }
+        body, html {
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="/">Prompts</a>
+    <a href="/create">Create New Prompt</a>
+    <a href="/api-token">API Token</a>
+</div>
+
+<div class="main-content">
+    <h2>Create New Custom Prompt</h2>
+    <form action="/submit-negotiator" method="post">
+        <label for="promptName">Prompt Name:</label><br>
+        <input type="text" id="promptName" name="promptName"><br>
+
+        <label for="promptDescription">Prompt Description:</label><br>
+        <textarea id="promptDescription" name="promptDescription"></textarea><br>
+
+        <label for="promptImage">Prompt Image:</label><br>
+        <input type="file" id="promptImage" name="promptImage" accept="image/*"><br>
+
+        <label for="prompt">Prompt:</label><br>
+        <textarea id="prompt" name="prompt"></textarea><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+</body>
+</html>

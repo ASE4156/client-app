@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Client APP</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+    <style>
+        .collection-view {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .box {
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .box img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+        }
+
+        .title-bar {
+            background-color: #f1f1f1;
+            padding: 5px;
+            text-align: center;
+        }
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 75px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .main-content {
+            margin-left: 200px;
+            padding: 0px 10px;
+        }
+        .box-link {
+            text-decoration: none;
+            color: inherit;
+        }
+        .box-link:hover .box {
+            opacity: 0.7;
+        }
+        body, html {
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="/">Prompts</a>
+    <a href="/create">Create New Prompt</a>
+    <a href="api-token">API Token</a>
+</div>
+
+<div class="main-content">
+    <h2>Custom Prompts for Columbia Students</h2>
+    <div class="collection-view">
+        <a href="negotiator" class="box-link">
+            <div class="box">
+                <img src="../static/images/negatiator.png" alt="Image Description">
+                <div class="title-bar">Negotiator</div>
+            </div>
+        </a>
+        <a href="#" class="box-link">
+        <div class="box">
+            <img src="../static/images/translate.png" alt="Image Description">
+            <div class="title-bar">Translator</div>
+        </div>
+        </a>
+        <a href="#" class="box-link">
+        <div class="box">
+            <img src="../static/images/email.jpg" alt="Image Description">
+            <div class="title-bar">Email Writer</div>
+        </div>
+        </a>
+        <a href="#" class="box-link">
+        <div class="box">
+            <img src="../static/images/generation.jpg" alt="Image Description">
+            <div class="title-bar">Generation Convo Learner</div>
+        </div>
+        </a>
+        <a href="#" class="box-link">
+        <div class="box">
+            <img src="../static/images/pet.png" alt="Image Description">
+            <div class="title-bar">Pet Talk</div>
+        </div>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
