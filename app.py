@@ -13,7 +13,7 @@ client_id = -1
 @app.route('/')
 def home():
     print(api_token)
-    return render_template('home.html')
+    return render_template('home.html',existing_token=api_token)
 
 @app.route('/create')
 def create():
@@ -75,6 +75,28 @@ def get_prompts():
         return jsonify(response.json())
     else:
         return jsonify({'error': 'Failed to communicate with the C++ service'}), response.status_code
+
+
+@app.route('/validate-token', methods=['POST'])
+def validate_token():
+    data = request.json
+    token = data.get('token')
+
+    if not token:
+        return jsonify({'error': 'Token is missing'}), 400
+
+    cpp_service_url = "http://localhost:8080/token/validate"
+
+    response = requests.get(cpp_service_url, json={'token': token})
+    if response.status_code == 200:
+        validation_response = response.json()
+        if validation_response.get('validated'):
+            return jsonify({'message': 'Token is valid'})
+        else:
+            return jsonify({'message': 'You have an Invalid Token.\n Please contact admin to reissue your api-token with YOLO.'}), 401
+    else:
+        return jsonify({'error': 'Failed to communicate with the C++ service'}), response.status_code
+
 
 @app.route('/api-token')
 def token():
