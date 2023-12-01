@@ -72,6 +72,12 @@
             margin-left: auto;
         }
 
+        .loading-message {
+            height: 20px;
+            width: auto;
+        }
+
+
 
 
         .input-area {
@@ -111,8 +117,8 @@
 
     <div class="chat-container">
         <div class="chat-area">
-            <div class="message">Welcome to the Negotiator Room!</div>
-            <div class="message">Please enter your message to become a better negotiator!</div>
+<!--            <div class="message">Welcome to the Negotiator Room!</div>-->
+<!--            <div class="message">Please enter your message to become a better negotiator!</div>-->
         </div>
 
         <div class="input-area">
@@ -121,29 +127,109 @@
         </div>
     </div>
 </div>
-
 <script>
+    let chatArea;
+
     document.addEventListener('DOMContentLoaded', function() {
-      const inputField = document.querySelector('.input-area input[type="text"]');
-      const chatArea = document.querySelector('.chat-area');
+        chatArea = document.querySelector('.chat-area');
+        const inputField = document.querySelector('.input-area input[type="text"]');
+        const sendButton = document.querySelector('.input-area button');
 
-      document.querySelector('.input-area button').addEventListener('click', function(e) {
-          e.preventDefault();
-          const messageText = inputField.value.trim();
-          if (messageText) {
-              const messageDiv = document.createElement('div');
-              messageDiv.classList.add('message', 'user-message');
-              messageDiv.textContent = messageText;
-              chatArea.appendChild(messageDiv);
-              inputField.value = '';
-              chatArea.scrollTop = chatArea.scrollHeight;
-          }
-      });
-  });
+        sendButton.addEventListener('click', function() {
+            sendMessage(inputField.value);
+        });
 
+        inputField.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage(inputField.value);
+            }
+        });
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const promptId = urlParams.get('prompt_id');
+
+        if (promptId) {
+            fetchPromptDetails(promptId);
+        }
+    });
+
+    function sendMessage(message) {
+        if (message.trim()) {
+            displayMessage(message, 'user-message');
+            sendMessageToServer(message);
+            document.querySelector('.input-area input[type="text"]').value = '';
+            displayLoadingGif();
+        }
+    }
+
+    function displayMessage(text, className) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        if (className) {
+            messageDiv.classList.add(className);
+        }
+        messageDiv.textContent = text;
+        chatArea.appendChild(messageDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    function sendMessageToServer(message) {
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log(urlParams)
+        const promptId = urlParams.get('prompt_id');
+
+        console.log(promptId);
+
+        fetch('/send-message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: message, prompt_id: promptId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            removeLoadingGif();
+            displayMessage(data.response);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            removeLoadingGif();
+        });
+    }
+
+    function displayLoadingGif() {
+        const img = document.createElement('img');
+        img.src = '/static/images/loading2.gif';
+        img.classList.add('message', 'loading-message');
+        chatArea.appendChild(img);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    function removeLoadingGif() {
+        const loadingMessages = chatArea.querySelectorAll('.loading-message');
+        loadingMessages.forEach(msg => msg.remove());
+    }
+
+    function fetchPromptDetails(promptId) {
+        fetch('/prompt-details?prompt_id=' + promptId)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.response) {
+                    console.log(data.response);
+                    displayInitialMessages(data.response[0]);
+                } else {
+                    console.error('Failed to fetch prompt details:', data.error || 'Unknown error');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function displayInitialMessages(promptDetails) {
+        displayMessage("Welcome to the " + promptDetails.prompt_name + " Room!", 'system-message');
+        displayMessage(promptDetails.prompt_description, 'system-message');
+    }
 </script>
-
-
 </body>
 </html>
