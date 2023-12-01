@@ -98,7 +98,7 @@
 
 <div class="main-content">
     <h2>Create New Custom Prompt</h2>
-    <form action="/submit-negotiator" method="post">
+    <form id="createPromptForm">
         <label for="promptName">Prompt Name:</label><br>
         <input type="text" id="promptName" name="promptName"><br>
 
@@ -114,6 +114,33 @@
         <input type="submit" value="Submit">
     </form>
 </div>
+
+<script>
+    document.getElementById('createPromptForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+        fetch('/submit-prompt', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.response && data.response.includes("Insert Successful")) {
+                alert('Creation Successful');
+                this.reset();
+            } else {
+                alert('Creation failed: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred');
+        });
+    });
+</script>
+
 
 </body>
 </html>
